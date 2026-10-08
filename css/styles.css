@@ -1,0 +1,471 @@
+/* =========================================================================
+   THIEVES & TASERS — landing page styles
+   ========================================================================= */
+
+@font-face {
+  font-family: "SuperBugly";
+  src: url("../assets/fonts/super_bugly/Super Bugly.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "CasuallySerious";
+  src: url("../assets/fonts/casually_serious/CasuallySerious-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  size-adjust: 140%;
+}
+
+:root {
+  --bg:        #23174c;
+  --bg-2:      #2a1d5a;
+  --bg-3:      #311f68;
+  --ink:       #ffffff;
+  --ink-soft:  #ffffff;
+  --ink-dim:   rgba(255,255,255,0.5);
+  --line:      rgba(255, 255, 255, 0.12);
+
+  --green:     #71de47;
+  --orange:    #ffab40;
+  --red:       #cc3650;
+  --purple:    #23174c;
+
+  --thief:     #ffab40;
+  --thief-2:   #71de47;
+  --danger:    #cc3650;
+
+  --font-display: "SuperBugly", "Arial Narrow", sans-serif;
+  --font-body: "CasuallySerious", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  --maxw: 1200px;
+  --gutter: clamp(1.1rem, 4vw, 3rem);
+  --radius: 14px;
+
+  /* Fluid spacing scale — one rhythm everywhere so grouping reads clearly:
+     tight binds a header to its own text; gap sits between separate elements
+     (image ↔ text, image ↔ image); section separates whole rows. Each scales
+     with the viewport, so nothing is pinned to a specific screen size. */
+  --space-tight:   clamp(0.6rem, 1.8vw, 1rem);
+  --space-gap:     clamp(2rem, 6vw, 3.25rem);
+  --space-section: clamp(3rem, 9vw, 5.5rem);
+
+  --shadow: 0 26px 60px rgba(0, 0, 0, 0.85), 0 10px 22px rgba(0, 0, 0, 0.7);
+  /* Media frame thickness in container-width units (cqw), so the border-to-image
+     ratio is the same on every frame regardless of how big that image renders.
+     Each media box sets container-type: inline-size for this to resolve. */
+  --media-border: clamp(8px, 2.24cqw, 24px);
+  --glow-thief: 0 0 0 1px rgba(255, 171, 64, 0.5), 0 0 30px rgba(255, 171, 64, 0.35);
+
+  /* Dark rim for the display font: strong contrast against every fill (white or
+     accent) and against the dark ground, plus a soft drop for depth. Built from
+     text-shadow so it sits outside the glyph and never thins the letterforms. */
+  --outline: #0d0524;
+  --text-outline:
+    -2px -2px 0 var(--outline),  2px -2px 0 var(--outline),
+    -2px  2px 0 var(--outline),  2px  2px 0 var(--outline),
+    -2px  0   0 var(--outline),  2px  0   0 var(--outline),
+     0   -2px 0 var(--outline),  0    2px 0 var(--outline),
+     0    5px 12px rgba(0, 0, 0, 0.55);
+}
+
+/* ----------------------------- Reset ----------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* room so the fixed wishlist bar never covers the footer / closing content */
+  padding-bottom: 5.5rem;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.05; letter-spacing: 0.5px; text-shadow: var(--text-outline); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+::selection { background: var(--thief); color: var(--purple); }
+
+body {
+  background: var(--bg);
+}
+
+
+/* ----------------------------- Buttons --------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.55em;
+  font-family: var(--font-display); font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase; font-size: 0.95rem;
+  padding: 0.78em 1.4em; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg-3); color: var(--ink); cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn__icon { font-size: 1.05em; line-height: 1; }
+.btn--lg { font-size: 1.1rem; padding: 1em 1.9em; border-radius: 12px; }
+
+.btn--wishlist {
+  background: var(--orange);
+  color: #ffffff; border-color: transparent;
+}
+.btn--wishlist:hover { filter: brightness(1.06); }
+
+.btn--discord { background: #5865F2; color: #fff; border-color: transparent; }
+.btn--discord:hover { filter: brightness(1.05); }
+
+/* ----------------------------- Sticky wishlist bar --------------------- */
+.wishbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.05rem var(--gutter);
+  background: rgba(18, 10, 50, 0.95); backdrop-filter: blur(10px);
+  border-top: none;
+  transform: translateY(100%); transition: transform 0.35s ease;
+}
+.wishbar.is-visible { transform: translateY(0); }
+/* Curvy top edge: a purple cap (same as the bar) makes the top wavy, with a thin
+   black outline on the wave — the button's idea, fill matched so it's not a border. */
+.wishbar__edge {
+  position: absolute; left: -2%; right: -2%; top: -12px; height: 18px;
+  z-index: 2; pointer-events: none; overflow: visible;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.wishbar__edge .edge-fill { fill: rgb(18, 10, 50); }
+.wishbar__edge .edge-line { fill: none; stroke: var(--outline); stroke-width: 3px; }
+.wishbar[hidden] { display: none; }
+.wishbar__btn {
+  display: inline-flex; align-items: center; gap: 0.55em;
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.6px; font-size: 1.4rem;
+  padding: 0.5em 1.4em;
+  background: transparent; color: var(--purple);
+  position: relative; z-index: 0; overflow: visible;
+  transition: transform 0.15s ease, filter 0.2s ease;
+}
+/* The button's amber shape IS the wavy pill (SVG fill), with a thin black
+   outline stroke. No colored border band — outline only. Sits behind the label. */
+.wishbar__frame {
+  position: absolute; inset: -2px; z-index: -1; pointer-events: none; overflow: visible;
+  fill: var(--orange); stroke: var(--outline); stroke-width: 3px;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.wishbar__btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.wishbar__steam { width: 1.1em; height: 1.1em; }
+
+/* ----------------------------- Hero ------------------------------------ */
+/* Two columns: the game (image) on the left, identity (logo + tagline) on
+   the right. Stacks to a single centered column on narrow screens. */
+.hero {
+  max-width: var(--maxw); margin: 0 auto; text-align: center;
+  padding: clamp(2.5rem, 7vw, 4.5rem) var(--gutter) clamp(1.5rem, 3vw, 2rem);
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(1.2rem, 3vw, 1.8rem);
+}
+.hero__logo {
+  width: min(392px, 57%); height: auto;
+  filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6));
+}
+.hero__tagline {
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  letter-spacing: clamp(1px, 0.6vw, 3px); font-size: clamp(1.35rem, 6.5vw, 4.2rem); line-height: 1.05;
+  color: var(--ink); text-shadow: var(--text-outline);
+  /* Breathing room above and below the tagline so it reads as its own beat
+     between the trailer and the Steam widget. */
+  margin-block: clamp(0.75rem, 3.5vw, 1.75rem); white-space: nowrap;
+}
+
+/* Amber keyword accent in section headers */
+.hl { color: var(--orange); }
+.hl--red { color: var(--red); }
+.row--heist { --frame: var(--red); }
+
+.hero__media {
+  position: relative;
+  width: 100%; max-width: 768px;
+  border-radius: 18px; box-shadow: var(--shadow);
+  aspect-ratio: 16 / 9; background: var(--bg-3);
+  container-type: inline-size;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* Same pop as the row cards; tilts left (default --tilt). */
+.hero__media:hover { transform: translateY(-6px) rotate(var(--tilt, -2.5deg)) scale(1.05); }
+.hero__media video, .hero__media img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 18px; }
+/* Vector wavy frame overlaid on each card. Sharp at any size; colored per
+   section via --frame; non-scaling-stroke keeps thickness even despite the
+   preserveAspectRatio="none" stretch. */
+.frame {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 1; pointer-events: none; overflow: visible;
+  fill: none; stroke-linejoin: round; stroke-linecap: round;
+}
+/* Wider black pass behind + colored pass on top = thin dark rim on the border,
+   matching the outlined display text. */
+.frame__edge { stroke: var(--outline); stroke-width: calc(var(--media-border) + 5px); } /* ~2.5px black rim each side */
+.frame__fill { stroke: var(--frame, var(--orange)); stroke-width: var(--media-border); }
+
+
+.steam-widget { width: 100%; max-width: 646px; margin: 0 auto; }
+.steam-widget iframe { width: 100%; max-width: 646px; border-radius: 6px; display: block; margin: 0 auto; }
+
+/* ----------------------------- Alternating rows ------------------------ */
+.rows {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) var(--gutter);
+  display: grid; gap: var(--space-section);
+}
+.row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+.row--reverse .row__media { order: 2; }
+
+.row__media {
+  padding: 0; border: none; border-radius: 14px; position: relative;
+  cursor: pointer; background: var(--bg-3); aspect-ratio: 16/9; box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  container-type: inline-size;
+}
+.row__media img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+/* Whole card (image + frame) pops off the page on hover: zoom, a playful tilt,
+   and a small lift — all together so the frame moves with the image. Direction
+   is set per section via --tilt (negative = opens left, positive = opens right). */
+.row__media:not(.row__media--character):hover { transform: translateY(-6px) rotate(var(--tilt, -2.5deg)) scale(1.05); }
+/* Heist and thieves cards tilt the opposite way from the guards card. */
+.row--heist, .row--thieves { --tilt: 2.5deg; }
+
+.row__text { display: flex; flex-direction: column; gap: var(--space-tight); }
+.row__text h2 { font-size: clamp(2.4rem, 5vw, 3.8rem); margin-bottom: 0; }
+.row--thieves .row__text h2 { color: var(--green); }
+.row--thieves { --frame: var(--green); }
+.row--guards .row__text h2 { color: var(--orange); }
+
+/* Character rows: title+text and screenshot share one column; the character
+   spans the full height of the other column. Placement is by grid areas so the
+   same markup reflows cleanly on mobile (see media query below). */
+.row--thieves,
+.row--guards {
+  align-items: start;
+  /* Equal columns so both characters span the same-height screenshot and end up
+     the same size (a wider screenshot column would make its character taller). */
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "char text"
+    "char shot";
+}
+.row--guards {
+  grid-template-areas:
+    "text char"
+    "shot char";
+}
+.row--thieves > .row__text,
+.row--guards  > .row__text { grid-area: text; }
+.row__media--character { grid-area: char; }
+.row__media--shot { grid-area: shot; }
+
+.row__media--character {
+  border: none; background: transparent; box-shadow: none;
+  container-type: normal;
+  /* Art starts at the TOP of the window and the parallax drifts it down (see
+     wireParallax); horizontally centered. No padding, so the window's full
+     height is the parallax track — the art rides from the top down to exactly
+     the bottom edge and its feet never clip. */
+  display: flex; align-items: flex-start; justify-content: center;
+  /* Square window spanning the text + screenshot column; its height is the
+     parallax track (top = beside the heading, bottom = beside the screenshot). */
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.row__media--character img {
+  /* Art shorter than its window; the leftover height is the travel. Both
+     characters cap at the same fraction so they render the same height. */
+  width: auto; height: auto; max-width: 100%; max-height: 72%; margin: 0;
+}
+.row--thieves .row__media--character img { filter: url(#char-outline-green); }
+.row--guards  .row__media--character img { filter: url(#char-outline-orange); }
+.row__text p { color: var(--ink-soft); font-size: clamp(1.3rem, 2.2vw, 1.7rem); max-width: 46ch; }
+
+@media (max-width: 760px) {
+  /* Stacked: separate elements sit a --space-gap apart, while each header stays
+     bound to its own text by the tighter --space-tight (set on .row__text), so
+     what belongs together reads as one group. */
+  .row { grid-template-columns: 1fr; gap: var(--space-gap); }
+  .row--reverse .row__media { order: 0; }
+  /* Headers and body read left-aligned on mobile (the tagline and the CTA stay
+     centered — they live in their own centered sections). Images stay centered. */
+  .row__text { text-align: left; }
+  .row__text p { margin: 0; max-width: none; }
+
+  /* Character rows: the character sits beside the text (no parallax window that
+     would waste vertical space on a narrow screen), with the screenshot full
+     width below. */
+  .row--thieves,
+  .row--guards {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "text char"
+      "shot shot";
+    align-items: center;
+    column-gap: clamp(0.9rem, 4vw, 1.5rem);
+  }
+  .row__media--character {
+    aspect-ratio: auto; padding: 0; height: auto;
+    align-items: center; overflow: visible;
+  }
+  .row__media--character img {
+    width: auto; height: auto; max-width: 100%;
+    /* Sized to sit next to the text; scales with the viewport, no breakpoints. */
+    max-height: min(28vh, 38vw); margin: 0;
+  }
+}
+
+/* ----------------------------- Screenshot strip ------------------------ */
+.strip {
+  max-width: 960px; margin: 0 auto;
+  padding: clamp(0.5rem, 1.5vw, 1rem) var(--gutter) clamp(1rem, 2.5vw, 1.75rem);
+  display: grid; grid-template-columns: 1fr; gap: 1rem;
+}
+.shot {
+  position: relative;
+  padding: 0; border: none; border-radius: 14px;
+  cursor: pointer; background: var(--bg-3); aspect-ratio: 16/9; width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  container-type: inline-size;
+}
+.shot img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+.shot:hover { transform: translateY(-6px) rotate(var(--tilt, -2.5deg)) scale(1.05); }
+/* Closing frame gets the same pop, tilting right. Not clickable, so no pointer. */
+.shot--solo { --tilt: 2.5deg; cursor: default; }
+
+
+/* ----------------------------- CTA ------------------------------------- */
+.cta {
+  text-align: center;
+  /* Reduced bottom padding so the title sits closer to the closing video. */
+  padding: clamp(3.5rem, 8vw, 6rem) var(--gutter) clamp(0.75rem, 2vw, 1.5rem);
+  /* No section background — the page-wide amber fade (on body) shows through. */
+}
+.cta__title { font-size: clamp(2.6rem, 7.5vw, 5rem); margin-bottom: 0; }
+
+/* Community channels — four equal icon buttons */
+.channels {
+  max-width: 420px; margin: 2.2rem auto 0;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+}
+.channel {
+  display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1; color: var(--ink-soft);
+  transition: color 0.2s ease;
+}
+.channel svg { width: 60%; height: 60%; transition: transform 0.2s ease; }
+.channel:hover { color: var(--orange); }
+.channel:hover svg { transform: scale(1.18); }
+/* channels without a configured URL (set to "" in CONFIG) — muted, non-clickable */
+.channel[aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
+/* Icons stay on a single row at every width — the grid keeps four equal columns. */
+
+/* ----------------------------- Footer ---------------------------------- */
+.footer {
+  padding: 1rem var(--gutter) 1.75rem;
+  background: transparent;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 0.5rem 2rem;
+}
+.footer__links {
+  display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;
+}
+.footer__links a {
+  color: var(--ink-soft); font-size: 0.95rem; transition: color 0.2s ease;
+}
+.footer__links a:hover { color: var(--thief); }
+.footer__by { color: var(--ink-soft); font-size: 0.95rem; }
+
+.footer--site {
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+.footer--site .footer__links a,
+.footer--site .footer__by { font-size: 1.25rem; }
+.footer--site .footer__links a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.footer--site .footer__links a:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* ----------------------------- Lightbox -------------------------------- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+  opacity: 0; transition: opacity 0.25s ease;
+}
+.lightbox.is-open { opacity: 1; }
+.lightbox[hidden] { display: none; }
+.lightbox__backdrop { position: absolute; inset: 0; background: rgba(6,3,18,0.86); backdrop-filter: blur(6px); }
+
+/* Framed figure sized to the 16:9 shot, within the viewport. */
+.lightbox__figure {
+  position: relative; z-index: 2;
+  width: min(92vw, 153vh); aspect-ratio: 16 / 9; max-height: 86vh;
+  container-type: inline-size;
+  transform: scale(0.9); transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+.lightbox.is-open .lightbox__figure { transform: none; }
+.lightbox__img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+/* Controls share one look: amber glyph, dark ring, chunky — same family as the
+   frames. Invert to solid amber on hover. */
+.lightbox__close, .lightbox__nav {
+  position: absolute; z-index: 3;
+  display: grid; place-items: center; line-height: 1;
+  font-family: var(--font-display); color: var(--orange);
+  background: rgba(12, 6, 32, 0.55); border: 3px solid var(--orange);
+  border-radius: 50%; cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+.lightbox__close:hover, .lightbox__nav:hover { background: var(--orange); color: var(--purple); }
+.lightbox__close { top: clamp(0.8rem, 2.5vw, 1.7rem); right: clamp(0.8rem, 2.5vw, 1.7rem); width: 48px; height: 48px; font-size: 1.35rem; }
+.lightbox__close:hover { transform: scale(1.12) rotate(90deg); }
+.lightbox__close:active { transform: scale(0.95); }
+.lightbox__nav {
+  top: 50%; transform: translateY(-50%);
+  width: 58px; height: 58px; font-size: 2.1rem; padding-bottom: 5px;
+}
+.lightbox__nav:hover { transform: translateY(-50%) scale(1.12); }
+.lightbox__nav:active { transform: translateY(-50%) scale(0.95); }
+.lightbox__nav--prev { left: clamp(0.6rem, 3vw, 2rem); }
+.lightbox__nav--next { right: clamp(0.6rem, 3vw, 2rem); }
+
+/* ----------------------------- Reveal ---------------------------------- */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Small phones (iPhone SE and down): shrink the display headings with the
+   viewport so no header wraps to two lines. Placed last so it overrides the
+   base heading sizes (media queries add no specificity). The vw term drives
+   sizing here; the rem floor only catches the very smallest widths. */
+@media (max-width: 480px) {
+  .row__text h2  { font-size: clamp(1.75rem, 8.4vw, 2.6rem); }
+  .cta__title    { font-size: clamp(1.45rem, 7vw, 2.6rem); }
+  .hero__tagline { font-size: clamp(1.2rem, 6vw, 1.9rem); }
+}
