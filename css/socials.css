@@ -45,10 +45,10 @@ body.socials {
 .wishlist-cta .link__icon { flex-basis: 1.25rem; height: 1.25rem; }
 .links li:nth-child(even) .pill-frame { transform: scaleX(-1); }
 
-.link--discord   { --pill-fill: #5865f2; --pill-hover-brightness: 0.96; }
-.link--youtube   { --pill-fill: var(--red); --pill-hover-brightness: 0.96; }
-.link--tiktok    { --pill-fill: var(--green); --pill-hover-brightness: 1.06; color: var(--purple); }
-.link--instagram { --pill-fill: #4b3496; --pill-hover-brightness: 0.96; }
+.link--discord   { --pill-fill: #5865f2; }
+.link--youtube   { --pill-fill: var(--red); }
+.link--tiktok    { --pill-fill: var(--green); color: var(--purple); }
+.link--instagram { --pill-fill: #4b3496; }
 
 .link[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
 
