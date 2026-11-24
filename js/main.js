@@ -1,46 +1,11 @@
-/* =========================================================================
-   THIEVES & TASERS — landing page behavior
-   ---------------------------------------------------------------------------
-   EDIT THIS CONFIG with your real links, then everything on the page updates.
-   ========================================================================= */
-const CONFIG = {
-  // Steam store page (the Wishlist button links here).
-  steamUrl: "https://store.steampowered.com/app/4536600/Thieves_and_Tasers/",
-
-  // Community channels — paste real URLs when you have them.
-  // Discord is live; the others stay visible (link to "#") until you fill them in.
-  channels: {
-    discord:   "https://discord.gg/ShfdKx4TKq",
-    instagram: "https://www.instagram.com/arcticpalmgames",
-    tiktok:    "https://www.tiktok.com/@arcticpalmgames",
-    youtube:   "https://www.youtube.com/@arcticpalmgames",
-  },
-};
-
+/* Landing page behavior */
 document.addEventListener("DOMContentLoaded", () => {
-  wireLinks();
   wireLightbox();
   wireWishbar();
   wireReveal();
   wireParallax();
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 });
-
-/* Apply CONFIG urls to every tagged element ----------------------------- */
-function wireLinks() {
-  document.querySelectorAll("[data-wishlist]").forEach((a) => (a.href = CONFIG.steamUrl));
-
-  document.querySelectorAll("[data-channel]").forEach((a) => {
-    const url = CONFIG.channels[a.getAttribute("data-channel")];
-    if (url && !url.includes("REPLACE_ME")) {
-      a.href = url;
-    } else {
-      a.removeAttribute("href");
-      a.setAttribute("aria-disabled", "true");
-      a.title = "Coming soon";
-    }
-  });
-}
 
 /* Screenshot lightbox with prev/next ------------------------------------ */
 function wireLightbox() {
