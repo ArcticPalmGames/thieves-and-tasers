@@ -73,23 +73,6 @@
         </video>
       </figure>
 
-      <nav class="channels channels--hero" aria-label="Steam and socials">
-        <a class="channel channel--steam" href="https://store.steampowered.com/app/4536600/Thieves_and_Tasers/" target="_blank" rel="noopener" aria-label="Steam">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-steam"/></svg>
-        </a>
-        <a class="channel channel--discord" href="https://discord.gg/ShfdKx4TKq" target="_blank" rel="noopener" aria-label="Discord">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-discord"/></svg>
-        </a>
-        <a class="channel channel--instagram" href="https://www.instagram.com/arcticpalmgames" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-instagram"/></svg>
-        </a>
-        <a class="channel channel--tiktok" href="https://www.tiktok.com/@arcticpalmgames" target="_blank" rel="noopener" aria-label="TikTok">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-tiktok"/></svg>
-        </a>
-        <a class="channel channel--youtube" href="https://www.youtube.com/@arcticpalmgames" target="_blank" rel="noopener" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-youtube"/></svg>
-        </a>
-      </nav>
       <div class="steam-widget">
         <iframe src="https://store.steampowered.com/widget/4536600/"
                 frameborder="0" width="646" height="190"
@@ -102,9 +85,15 @@
     <section class="rows">
       <!-- Two sides: image left, text right -->
       <article class="row row--reverse row--heist">
-        <button class="row__media media-frame" data-shot>
+        <button class="row__media media-frame slideshow" data-shot data-slideshow aria-label="Gameplay screenshots, changing every 5 seconds. Open full size.">
           <svg class="media-frame__outline" viewBox="-1 -2 322 184" preserveAspectRatio="none" aria-hidden="true"><use href="#media-frame-path" class="media-frame__edge"/><use href="#media-frame-path" class="media-frame__line"/></svg>
-          <img src="assets/screenshots/thief_sneaking2.webp" alt="A guard confronting two thieves during a heist" loading="lazy" />
+          <img class="is-active" src="assets/screenshots/gallery_general_store.webp" alt="A guard aiming a taser at a thief outside the General Store" loading="lazy" />
+          <img src="assets/screenshots/gallery_highground.webp" alt="A thief sneaking along the Highground at night" loading="lazy" />
+          <img src="assets/screenshots/gallery_jetpack_hotel.webp" alt="A guard jetpacking over the Hotel" loading="lazy" />
+          <img src="assets/screenshots/gallery_busted.webp" alt="A guard busting a thief on the Highground" loading="lazy" />
+          <img src="assets/screenshots/gallery_graveyard.webp" alt="A handcuffed thief in the Graveyard" loading="lazy" />
+          <img src="assets/screenshots/gallery_tunnel.webp" alt="A guard chasing a thief through a tunnel" loading="lazy" />
+          <img src="assets/screenshots/gallery_courtyard_taser.webp" alt="A guard firing a taser at a thief in the Courtyard" loading="lazy" />
         </button>
         <div class="row__text">
           <h2>Two sides. One <span class="hl hl--red">heist</span>.</h2>
@@ -121,7 +110,7 @@
         <div class="row__media row__media--character"><img src="assets/screenshots/thieves.webp" alt="Thief characters" loading="lazy" data-parallax="0.08" /></div>
         <button class="row__media row__media--shot media-frame" data-shot>
           <svg class="media-frame__outline" viewBox="-1 -2 322 184" preserveAspectRatio="none" aria-hidden="true"><use href="#media-frame-path" class="media-frame__edge"/><use href="#media-frame-path" class="media-frame__line"/></svg>
-          <img src="assets/screenshots/thief_sneaking.webp" alt="A thief sneaking past a guard at night" loading="lazy" />
+          <img src="assets/screenshots/thieves_courtyard.webp" alt="Thieves running through the Courtyard" loading="lazy" />
         </button>
       </article>
 
@@ -134,7 +123,7 @@
         <div class="row__media row__media--character"><img src="assets/screenshots/guard.webp" alt="Guard character" loading="lazy" data-parallax="0.08" /></div>
         <button class="row__media row__media--shot media-frame" data-shot>
           <svg class="media-frame__outline" viewBox="-1 -2 322 184" preserveAspectRatio="none" aria-hidden="true"><use href="#media-frame-path" class="media-frame__edge"/><use href="#media-frame-path" class="media-frame__line"/></svg>
-          <img src="assets/screenshots/guard_running.webp" alt="A guard launching with a jetpack at night" loading="lazy" />
+          <img src="assets/screenshots/guards_running.webp" alt="Three guards running with tasers raised" loading="lazy" />
         </button>
       </article>
     </section>
@@ -148,8 +137,8 @@
     <section class="strip">
       <figure class="shot shot--solo media-frame">
         <svg class="media-frame__outline" viewBox="-1 -2 322 184" preserveAspectRatio="none" aria-hidden="true"><use href="#media-frame-path" class="media-frame__edge"/><use href="#media-frame-path" class="media-frame__line"/></svg>
-        <img src="assets/screenshots/mainhouse_overview.webp"
-             alt="Thieves and guards facing off across the heist grounds"
+        <img src="assets/screenshots/thieves_loot.webp"
+             alt="Three thieves running off with a loot chest"
              loading="lazy" />
       </figure>
 

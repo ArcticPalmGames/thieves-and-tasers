@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wireWishbar();
   wireReveal();
   wireParallax();
+  wireSlideshow();
   document.querySelectorAll("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
 });
 
@@ -11,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 function wireLightbox() {
   const box = document.getElementById("lightbox");
   const img = document.getElementById("lightboxImg");
-  const shots = [...document.querySelectorAll("[data-shot] img")].map((i) => i.src);
+  const imgs = [...document.querySelectorAll("[data-shot] img")];
+  const shots = imgs.map((i) => i.src);
   let idx = 0;
   let closeTimer;
 
@@ -31,7 +33,11 @@ function wireLightbox() {
     closeTimer = setTimeout(() => { box.hidden = true; img.src = ""; }, 260);
   };
 
-  document.querySelectorAll("[data-shot]").forEach((btn, i) => btn.addEventListener("click", () => show(i)));
+  // A slideshow frame holds several images: open the one currently showing.
+  document.querySelectorAll("[data-shot]").forEach((btn) => btn.addEventListener("click", () => {
+    const current = btn.querySelector("img.is-active") || btn.querySelector("img");
+    show(imgs.indexOf(current));
+  }));
   document.querySelector("[data-close-lightbox]")?.addEventListener("click", close);
   document.querySelector("[data-lightbox-prev]")?.addEventListener("click", () => show(idx - 1));
   document.querySelector("[data-lightbox-next]")?.addEventListener("click", () => show(idx + 1));
@@ -113,4 +119,47 @@ function wireReveal() {
     { threshold: 0.12 }
   );
   targets.forEach((t) => io.observe(t));
+}
+
+/* Gameplay slideshow — crossfades to the next screenshot every 5 seconds.
+   Pauses while hovered or focused, while the lightbox is open, when the frame
+   is off-screen or the tab is hidden. Stays on the first image for visitors
+   who prefer reduced motion. */
+function wireSlideshow() {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll("[data-slideshow]").forEach((frame) => {
+    const slides = [...frame.querySelectorAll("img")];
+    if (slides.length < 2 || reduce) return;
+
+    const lightbox = document.getElementById("lightbox");
+    let idx = Math.max(0, slides.findIndex((s) => s.classList.contains("is-active")));
+    let hovered = false;
+    let onScreen = true;
+
+    const advance = () => {
+      if (hovered || !onScreen || document.hidden || (lightbox && !lightbox.hidden)) return;
+      slides[idx].classList.remove("is-active");
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add("is-active");
+    };
+
+    // Load every slide once the frame is near view, so each fade-in is ready.
+    const preload = () => slides.forEach((s) => { s.loading = "eager"; });
+
+    frame.addEventListener("mouseenter", () => (hovered = true));
+    frame.addEventListener("mouseleave", () => (hovered = false));
+    frame.addEventListener("focus", () => (hovered = true));
+    frame.addEventListener("blur", () => (hovered = false));
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => entries.forEach((e) => {
+        onScreen = e.isIntersecting;
+        if (onScreen) preload();
+      }), { rootMargin: "200px" }).observe(frame);
+    } else {
+      preload();
+    }
+
+    setInterval(advance, 5000);
+  });
 }
