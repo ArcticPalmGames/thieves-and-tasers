@@ -279,7 +279,7 @@ body {
    Each image keeps the frame's full box, so the wavy clip still lines up. */
 .slideshow { display: block; position: relative; }
 .slideshow img {
-  position: absolute; inset: 0;
+  position: absolute; top: 0; left: 0; /* not `inset`: older iOS Safari lacks it */
   opacity: 0;
   transition: opacity 0.9s ease;
 }
